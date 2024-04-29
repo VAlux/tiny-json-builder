@@ -43,7 +43,7 @@ class JsonToStringInterpreterTest {
         field("child",
           object("boolean", bool(false))));
 
-    var actual = new JsonToStringInterpreter().interpret(json);
+    String actual = new JsonToStringInterpreter().interpret(json);
     var expected = """
       {"bool":true,"string":"hello","array":["one","two","three"],"byte":1,"double":5.5,"char":"a","short":15,"integer":5,"float":5.5,"long":10,"child":{"boolean":false}}""";
 
