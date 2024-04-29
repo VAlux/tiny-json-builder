@@ -9,7 +9,7 @@ public record Json(Map<String, ? extends JsonValue<?>> entries) {
   public record JsonNumber(Number value) implements JsonValue<Number> {}
   public record JsonBoolean(Boolean value) implements JsonValue<Boolean> {}
   public record JsonObject(Json value) implements JsonValue<Json> {}
-  public record JsonArray(List<JsonValue<?>> value) implements JsonValue<List<JsonValue<?>>> {}
+  public record JsonArray<T>(List<JsonValue<T>> value) implements JsonValue<List<JsonValue<T>>> {}
   //@formatter:on
 }
 
