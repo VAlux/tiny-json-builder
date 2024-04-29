@@ -1,5 +1,6 @@
 package dev.alvo.json.interpreter;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static dev.alvo.json.JsonBuildingDSL.*;
@@ -16,7 +17,6 @@ class JsonToStringInterpreterTest {
     double doubleValue = 5.5d;
     char charValue = 'a';
     boolean booleanValue = true;
-
 
     var json =
       json(
@@ -37,7 +37,9 @@ class JsonToStringInterpreterTest {
           object("boolean", bool(false))));
 
     var actual = new JsonToStringInterpreter().interpret(json);
+    var expected = """
+      {"bool":true,"array":["one","two","three"],"byte":1,"double":5.5,"char":"a","short":15,"integer":5,"float":5.5,"long":10,"child":{"boolean":false}}""";
 
-    System.out.println(actual);
+    Assertions.assertEquals(expected, actual);
   }
 }
