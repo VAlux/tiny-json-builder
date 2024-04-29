@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import static dev.alvo.json.Json.JsonObject;
 import static dev.alvo.json.JsonBuildingDSL.*;
 
 class JsonToStringInterpreterTest {
@@ -44,7 +45,7 @@ class JsonToStringInterpreterTest {
 
     var actual = new JsonToStringInterpreter().interpret(json);
     var expected = """
-      {"bool":true,"array":["one","two","three"],"byte":1,"double":5.5,"char":"a","short":15,"integer":5,"float":5.5,"long":10,"child":{"boolean":false}}""";
+      {"bool":true,"string":"hello","array":["one","two","three"],"byte":1,"double":5.5,"char":"a","short":15,"integer":5,"float":5.5,"long":10,"child":{"boolean":false}}""";
 
     Assertions.assertEquals(expected, actual);
   }
@@ -75,6 +76,24 @@ class JsonToStringInterpreterTest {
     var actual = new JsonToStringInterpreter().interpret(json);
     var expected = """
       {"numbers":[0,1,2,3,4,5,6,7,8,9]}""";
+
+    Assertions.assertEquals(expected, actual);
+  }
+
+  private JsonObject generateRecursive(JsonObject current, int level, int limit) {
+    if (level > limit) {
+      return current;
+    }
+
+    return generateRecursive(object(String.valueOf(level), current), level + 1, limit);
+  }
+
+  @Test
+  void testDeepNestedObjectGeneratedCorrectly() {
+    var json = json(field("start", generateRecursive(object("finish", bool(true)), 0, 10)));
+    var actual = new JsonToStringInterpreter().interpret(json);
+    var expected = """
+      {"start":{"10":{"9":{"8":{"7":{"6":{"5":{"4":{"3":{"2":{"1":{"0":{"finish":true}}}}}}}}}}}}}""";
 
     Assertions.assertEquals(expected, actual);
   }

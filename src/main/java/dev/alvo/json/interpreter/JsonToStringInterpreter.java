@@ -40,7 +40,7 @@ public class JsonToStringInterpreter {
       return bool.value().toString();
     }
 
-    if (value instanceof JsonArray array) {
+    if (value instanceof JsonArray<?> array) {
       return "[" + interpret(array.value()) + "]";
     }
 
