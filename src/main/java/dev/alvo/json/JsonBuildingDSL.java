@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static dev.alvo.json.Json.*;
@@ -18,12 +19,12 @@ public final class JsonBuildingDSL {
     return new JsonField<>(key, value);
   }
 
-  public static <T> JsonArray<T> array(JsonValue<T>... items) {
+  public static JsonArray array(JsonValue<?>... items) {
     return array(Arrays.asList(items));
   }
 
-  public static <T> JsonArray<T> array(Collection<JsonValue<T>> items) {
-    return new JsonArray<>(items.stream().toList());
+  public static JsonArray array(Collection<JsonValue<?>> items) {
+    return new JsonArray(items.stream().toList());
   }
 
   public static JsonString string(String value) {
@@ -56,5 +57,9 @@ public final class JsonBuildingDSL {
 
   public static <T extends JsonValue<?>, R> List<T> forEach(Collection<R> items, Function<R, T> supplier) {
     return items.stream().map(supplier).collect(Collectors.toList());
+  }
+
+  public static <T> GuardedJsonValue<T> guard(JsonValue<T> value, Predicate<T> predicate) {
+    return new GuardedJsonValue<>(value, predicate);
   }
 }

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 import static dev.alvo.json.Json.JsonObject;
@@ -30,6 +31,7 @@ class JsonToStringInterpreterTest {
           array(
             string("one"),
             string("two"),
+            number(1),
             string("three"))),
         field("byte", number(byteValue)),
         field("short", number(shortValue)),
@@ -43,11 +45,11 @@ class JsonToStringInterpreterTest {
         field("child",
           object("boolean", bool(false))));
 
-    String actual = new JsonToStringInterpreter().interpret(json);
+    Optional<String> actual = new JsonToStringInterpreter().interpret(json);
     var expected = """
-      {"bool":true,"string":"hello","array":["one","two","three"],"byte":1,"double":5.5,"char":"a","short":15,"integer":5,"float":5.5,"long":10,"child":{"boolean":false}}""";
+      {"bool":true,"string":"hello","array":["one","two",1,"three"],"byte":1,"double":5.5,"char":"a","short":15,"integer":5,"float":5.5,"long":10,"child":{"boolean":false}}""";
 
-    Assertions.assertEquals(expected, actual);
+    Assertions.assertEquals(expected, actual.get());
   }
 
   @Test
@@ -62,7 +64,7 @@ class JsonToStringInterpreterTest {
     var expected = """
       {"strings":["one","two","three"]}""";
 
-    Assertions.assertEquals(expected, actual);
+    Assertions.assertEquals(expected, actual.get());
   }
 
   @Test
@@ -77,7 +79,7 @@ class JsonToStringInterpreterTest {
     var expected = """
       {"numbers":[0,1,2,3,4,5,6,7,8,9]}""";
 
-    Assertions.assertEquals(expected, actual);
+    Assertions.assertEquals(expected, actual.get());
   }
 
   private JsonObject generateRecursive(JsonObject current, int level, int limit) {
@@ -95,6 +97,6 @@ class JsonToStringInterpreterTest {
     var expected = """
       {"start":{"10":{"9":{"8":{"7":{"6":{"5":{"4":{"3":{"2":{"1":{"0":{"finish":true}}}}}}}}}}}}}""";
 
-    Assertions.assertEquals(expected, actual);
+    Assertions.assertEquals(expected, actual.get());
   }
 }
