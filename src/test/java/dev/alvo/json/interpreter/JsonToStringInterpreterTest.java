@@ -99,4 +99,20 @@ class JsonToStringInterpreterTest {
 
     Assertions.assertEquals(expected, actual.get());
   }
+
+  @Test
+  void testGuardingJsonValues() {
+    var json = json(
+      field("regular", string("displayed")),
+      field("guarded", guard(string("hidden"), str -> str.equalsIgnoreCase("GUARDED"))),
+      field("more regular", string("displayed")
+      )
+    );
+
+    var actual = new JsonToStringInterpreter().interpret(json);
+    var expected = """
+      {"more regular":"displayed","regular":"displayed"}""";
+
+    Assertions.assertEquals(expected, actual.get());
+  }
 }
