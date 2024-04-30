@@ -28,8 +28,12 @@ public record Json(Map<String, ? extends JsonValue<?>> entries) {
       return Optional.empty();
     }
 
-    public <R> R map(Function<? super V, ? extends R> mapper) {
-      return mapper.apply(this.jsonValue.value());
+    public <R> Optional<R> map(Function<? super V, ? extends R> mapper) {
+      if (this.predicate.test(this.jsonValue.value())) {
+        return Optional.ofNullable(mapper.apply(this.jsonValue.value()));
+      }
+
+      return Optional.empty();
     }
 
     public <R> Optional<R> flatMap(Function<? super T, ? extends Optional<R>> mapper) {
