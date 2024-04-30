@@ -59,7 +59,7 @@ public final class JsonBuildingDSL {
     return items.stream().map(supplier).collect(Collectors.toList());
   }
 
-  public static <T> GuardedJsonValue<T> guard(JsonValue<T> value, Predicate<T> predicate) {
+  public static <V, T extends JsonValue<V>> GuardedJsonValue<V, T> guard(T value, Predicate<V> predicate) {
     return new GuardedJsonValue<>(value, predicate);
   }
 }

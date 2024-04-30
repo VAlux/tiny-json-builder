@@ -52,8 +52,8 @@ public class JsonToStringInterpreter implements Interpreter<String> {
       return interpret(object.value());
     }
 
-    if (value instanceof GuardedJsonValue<?> guardedValue) {
-      return guardedValue.value().flatMap(__ -> interpret(guardedValue.jsonValue()));
+    if (value instanceof GuardedJsonValue<?, ?> guardedValue) {
+      return guardedValue.flatMap(this::interpret);
     }
 
     throw new IllegalArgumentException("Unsupported value type: " + value.getClass());
