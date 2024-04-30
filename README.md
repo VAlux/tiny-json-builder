@@ -70,3 +70,40 @@ String result = new JsonToStringInterpreter().interpret(json);
   }
 }
 ```
+## Features
+
+### `forEach` combinator:
+```java
+
+var json =
+    json(
+        field("numbers",
+            array(
+                forEach(IntStream.iterate(0, i -> i + 1).limit(10).boxed().toList(), JsonBuildingDSL::number))));
+```
+will result into:
+```json
+{
+  "numbers": [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
+}
+```
+
+### `guard` combinator
+
+```java
+
+var json = 
+    json(
+        field("regular", string("displayed")),
+        field("guarded", guard(string("hidden"), str -> str.equalsIgnoreCase("GUARDED"))),
+        field("more regular", string("displayed")
+    )
+);
+```
+will result into (guarded predicate removes field from the resulting json):
+```json
+{
+  "more regular": "displayed",
+  "regular": "displayed"
+}
+```
